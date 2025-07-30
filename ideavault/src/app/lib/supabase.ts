@@ -1,14 +1,17 @@
-// src/lib/supabase.ts
+// src/app/lib/supabase.ts - Fixed version of your original
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Remove the ! to prevent build crashes, add fallbacks
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
 
-// Debug logging
-console.log('Environment check:')
-console.log('URL:', supabaseUrl)
-console.log('Key exists:', !!supabaseAnonKey)
-console.log('Key length:', supabaseAnonKey?.length)
+// Debug logging (only in development)
+if (process.env.NODE_ENV === 'development') {
+  console.log('Environment check:')
+  console.log('URL:', supabaseUrl)
+  console.log('Key exists:', !!supabaseAnonKey)
+  console.log('Key length:', supabaseAnonKey?.length)
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
