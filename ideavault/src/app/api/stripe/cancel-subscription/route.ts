@@ -1,19 +1,25 @@
-// src/app/api/stripe/cancel-subscription/route.ts
+// src/app/api/stripe/cancel-subscription/route.ts - FIXED VERSION
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16' as any,
 })
-// Create Supabase client
+
+// Create Supabase client with fallbacks (REMOVED THE ! OPERATORS)
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // You'll need this for server-side
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key'
 )
 
 export async function POST(request: NextRequest) {
   try {
+    // Runtime check for required environment variables
+    if (!process.env.STRIPE_SECRET_KEY || !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
+    }
+
     const { subscriptionId, ideaId } = await request.json()
     
     // Get user from authorization header

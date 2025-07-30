@@ -1,4 +1,4 @@
-// next.config.js - Skip problematic builds
+// next.config.js - Ultra minimal version
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -6,14 +6,6 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  // Skip static generation for API routes
-  experimental: {
-    isrMemoryCacheSize: 0,
-  },
-  // Disable static optimization for pages with API calls
-  generateBuildId: async () => {
-    return 'ideavault-build'
   }
 }
 
